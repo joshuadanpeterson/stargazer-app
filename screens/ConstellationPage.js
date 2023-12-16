@@ -1,20 +1,23 @@
 import React, { useState, useEffect } from "react";
-import {
-	View,
-	Text,
-	Image,
-	ScrollView,
-	StyleSheet,
-	Button,
-} from "react-native";
+import { View, Text, Image, ScrollView, StyleSheet } from "react-native";
 import fetchConstellationExtract from "../data/fetchConstellationExtract"; // Adjust the path as needed
 
-const ConstellationPage = ({ route }) => {
+const ConstellationPage = ({ route, navigation }) => {
 	const [extract, setExtract] = useState("");
 	const [image, setImage] = useState(null);
-	const { constellationId } = route.params; // Assuming you are passing the constellation ID through route
+
+	// Safe access to constellationId with default value
+	const constellationId = route.params?.constellationId || "defaultId";
 
 	useEffect(() => {
+		// Ensure constellationId is available
+		if (!constellationId || constellationId === "defaultId") {
+			// Handle the scenario where constellationId is not available
+			console.error("Constellation ID is missing");
+			navigation.goBack(); // Navigate back if constellationId is not available
+			return;
+		}
+
 		const fetchData = async () => {
 			const extractData = await fetchConstellationExtract(
 				constellationId
@@ -26,12 +29,18 @@ const ConstellationPage = ({ route }) => {
 		};
 
 		fetchData();
-	}, [constellationId]);
+	}, [constellationId, navigation]);
+
+	// Rendering only if constellationId is available and not default
+	if (!constellationId || constellationId === "defaultId") {
+		return <Text>Loading or invalid constellation...</Text>;
+	}
 
 	return (
 		<ScrollView style={styles.container}>
 			<Text style={styles.title}>
-				{constellations[constellationId].name}
+				{constellations[constellationId]?.name ||
+					"Unknown Constellation"}
 			</Text>
 			{image && <Image source={{ uri: image }} style={styles.image} />}
 			<Text style={styles.extract}>{extract}</Text>

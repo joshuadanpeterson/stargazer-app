@@ -1,12 +1,14 @@
 import React from "react";
-import { View, Text, Image, StyleSheet } from "react-native";
+import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
 
 const FeaturedConstellation = ({ name, description, image }) => {
 	return (
-		<View style={styles.container}>
-			<Text style={styles.title}>{name}</Text>
-			<Image source={{ uri: image }} style={styles.image} />
-			<Text style={styles.description}>{description}</Text>
+		<View>
+			<TouchableOpacity style={styles.container} onPress={onPress}>
+				<Text style={styles.title}>{name}</Text>
+				<Image source={{ image }} style={styles.image} />
+				{/* <Text style={styles.description}>{description}</Text> */}
+			</TouchableOpacity>
 		</View>
 	);
 };
@@ -18,6 +20,7 @@ const styles = StyleSheet.create({
 	title: {
 		fontSize: 18,
 		fontWeight: "bold",
+		alignItems: "center",
 	},
 	image: {
 		width: "100%",

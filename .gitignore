@@ -40,3 +40,6 @@ yarn-error.*
 
 # Filetree
 filetree.txt
+
+# Astronomy API Request
+astronomyApiRequest.js
